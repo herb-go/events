@@ -56,3 +56,9 @@ func CreateReport(e *Event, id string, timestamp int64) (*Report, error) {
 	report.Timestamp = timestamp
 	return report, nil
 }
+
+//Reporter report interface
+type Reporter interface {
+	//Report report given report
+	Report(*Report)
+}
