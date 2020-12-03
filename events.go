@@ -102,7 +102,7 @@ func WrapEmit(t Type) func(*Event) bool {
 	}
 }
 
-//WrapOn return a defalut service hanlder registeror of give event type
+//WrapOn return a defalut service hanlder registeror of given event type
 func WrapOn(t Type) func(Hanlder) {
 	return func(hanlder Hanlder) {
 		On(t, hanlder)
