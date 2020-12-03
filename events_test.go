@@ -66,3 +66,11 @@ func TestDefaultEvents(t *testing.T) {
 	}
 
 }
+
+func TestMap(t *testing.T) {
+	m := Map(map[string]string{"test": "test"})
+	data, err := m.EventProperties()
+	if data == nil || err != nil {
+		t.Fatal(data, err)
+	}
+}
