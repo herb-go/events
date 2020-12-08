@@ -1,7 +1,6 @@
 package events
 
 import (
-	"errors"
 	"testing"
 	"time"
 )
@@ -66,56 +65,4 @@ func TestDefaultEvents(t *testing.T) {
 		t.Error(e2)
 	}
 
-}
-
-func TestMap(t *testing.T) {
-	m := Map(map[string]string{"test": "test"})
-	data, err := m.EventReportBody()
-	if data == nil || err != nil {
-		t.Fatal(data, err)
-	}
-}
-
-var ErrFoo = errors.New("test error")
-
-type ErrBody struct {
-}
-
-func (b ErrBody) EventReportBody() (map[string]string, error) {
-	return nil, ErrFoo
-}
-func TestReport(t *testing.T) {
-	var e *Event
-	var r *Report
-	var err error
-	var testType = Type("test")
-	e = NewEvent()
-	r, err = CreateReport(e, "testid", 1)
-	if r != nil || err != ErrNotReportableEvent {
-		t.Fatal(r, err)
-	}
-	e = NewEvent().WithData("stringdata")
-	r, err = CreateReport(e, "testid", 1)
-	if r != nil || err != ErrNotReportableEvent {
-		t.Fatal(r, err)
-	}
-	e = NewEvent().WithData(ErrBody{})
-	r, err = CreateReport(e, "testid", 1)
-	if r != nil || err != ErrFoo {
-		t.Fatal(r, err)
-	}
-
-	e = NewEvent().WithTarget("testtarget").WithType(testType).WithData(Map(map[string]string{"testkey": "testvalue"}))
-	r, err = CreateReport(e, "testid", 1)
-	if r == nil || err != nil {
-		t.Fatal(r, err)
-	}
-	if Type(r.Type) != testType ||
-		r.ID != "testid" ||
-		r.Timestamp != 1 ||
-		r.Target != "testtarget" ||
-		r.Body == nil ||
-		r.Body["testkey"] != "testvalue" {
-		t.Fatal(r)
-	}
 }
